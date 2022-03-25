@@ -80,11 +80,26 @@ public class JDBCExample {
      * @throws SQLException
      */
     public static void registrarNuevoProducto(Connection con, int codigo, String nombre,int precio) throws SQLException{
+        String poblarProductos =
+                "INSERT INTO ORD_PRODUCTOS (codigo, nombre, precio) " +
+                        "VALUES (?,?,?);";
         //Crear preparedStatement
+        try (PreparedStatement registrarProducto = con.prepareStatement(poblarProductos)){
         //Asignar parámetros
+            registrarProducto.setInt(1, codigo);
+            registrarProducto.setString(2, nombre);
+            registrarProducto.setInt(3, precio);
         //usar 'execute'
-
-
+            registrarProducto.execute();
+        }catch (SQLException e) {
+            if (con != null) {
+                try {
+                    System.err.print(e.getMessage());
+                    con.rollback();
+                } catch (SQLException excep) {
+                }
+            }
+        }
         con.commit();
 
     }
@@ -104,9 +119,13 @@ public class JDBCExample {
                         "WHERE ORD_DETALLE_PEDIDO.pedido_fk = ?";
         //Crear prepared statement
         try (PreparedStatement nombresPedidos = con.prepareStatement(selectNombreProducto)) {
+            //asignar parámetros
             nombresPedidos.setInt(1, codigoPedido);
+            //usar executeQuery
             ResultSet respuesta = nombresPedidos.executeQuery();
+            //Sacar resultados del ResultSet
             while (respuesta.next()) {
+                //Llenar la lista y retornarla
                 np.add(respuesta.getString("nombre"));
             }
         } catch (SQLException e) {
@@ -117,10 +136,6 @@ public class JDBCExample {
                 } catch (SQLException excep) {
                 }
             }
-            //asignar parámetros
-            //usar executeQuery
-            //Sacar resultados del ResultSet
-            //Llenar la lista y retornarla
 
 
         }
@@ -134,18 +149,35 @@ public class JDBCExample {
      * @return el costo total del pedido (suma de: cantidades*precios)
      */
     public static int valorTotalPedido(Connection con, int codigoPedido){
-        String valorTotalPedido =
-                "SELECT SUM(p.precio * odp.cantidad) AS suma_pedidos " +
+        int resultado = 0;
+        String selectCostoPedido =
+                "SELECT SUM(p.precio * odp.cantidad) AS suma_pedido " +
                         "FROM ORD_PRODUCTOS p " +
                         "INNER JOIN ORD_DETALLE_PEDIDO odp " +
                         "ON p.codigo = odp.producto_fk " +
-                        "WHERE odp.pedido_fk = ?";
-        //Crear prepared statement
-        //asignar parámetros
-        //usar executeQuery
-        //Sacar resultado del ResultSet
+                        "WHERE odp.pedido_fk = ? ";
+        try{
 
-        return 0;
+            PreparedStatement total = con.prepareStatement(selectCostoPedido);
+            //asignar parámetros
+            total.setInt(1, codigoPedido);
+            //usar executeQuery
+            ResultSet respuesta = total.executeQuery();
+            //Sacar resultados del ResultSet
+            while (respuesta.next()){
+                //Llenar la lista y retornarla
+                resultado = respuesta.getInt("suma_pedido");
+            }
+        }catch (SQLException e) {
+            if (con != null) {
+                try {
+                    System.err.print("Transaction is being rolled back");
+                    con.rollback();
+                } catch (SQLException excep) {
+                }
+            }
+        }
+        return resultado;
     }
 
 }
