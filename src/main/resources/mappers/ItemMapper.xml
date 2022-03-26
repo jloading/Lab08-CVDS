@@ -4,7 +4,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
 <mapper namespace="edu.eci.cvds.sampleprj.dao.mybatis.mappers.ItemMapper">
-    <resultMap type='VI_ITEMS' id='Items'>
+    <resultMap type='Item' id='ItemResult'>
         <id property='id' column='ID'/>
         <result property='nombre' column='NOMBRE'/>
         <result property='descripcion' column='DESCRIPCION'/>
@@ -12,6 +12,7 @@
         <result property='tarifaxdia' column='TARIFA_DIA'/>
         <result property='formatorenta' column='FORMATO_RENTA'/>
         <result property='genero' column='GENERO'/>
-        <association property="TIPOITEM_id" javaType="VI_ITEMRENTADO"/>
+        <association property="tipo" javaType="ItemRentado" resultMap="falta result map" columnPrefix='ti_'/>
     </resultMap>
 </mapper>
+
