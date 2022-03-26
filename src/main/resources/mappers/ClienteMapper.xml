@@ -8,5 +8,13 @@
     <select parameterType="map" id="consultarClientes" resultMap="ClienteResult">
         SENTENCIA SQL
     </select>
-          	
+
+    <resultMap type='VI_CLIENTES' id='ClientesResult'>
+        <id property='documento' column='DOCUMENTO'/>
+        <result property='nombre' column='NOMBRE'/>
+        <result property='telefono' column='TELEFONO'/>
+        <result property='direccion' column='DIRECCION'/>
+        <result property='email' column='EMAIL'/>
+        <result property='vetado' column='VETADO'/>
+    </resultMap>
 </mapper>
