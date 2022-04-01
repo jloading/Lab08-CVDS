@@ -110,9 +110,4 @@ public class Item implements Serializable{
         return "Item{" + "tipo=" + tipo + ", id=" + id + ", nombre=" + nombre + ", tarifaxDia=" + tarifaxDia + '}';
     }
 
-
-    
-    
-    
-    
 }
