@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3c.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Registro Alquiler</title>
+    <style>
+	body{
+		background-position: center;
+		background-repeat: repeat-y;
+		background-size: cover;
+		color: white;
+	}
+
+	</style>
+</h:head>
+
+<h:body>
+    <div class="card">
+        <h:form id= "Formato">
+            <!-- Items Rentados por el cliente -->
+            <p:dataTable var="itemRentado" value="#{AlquilerItemsBean.clienteSeleccionado.getRentados()}" rows="10"
+                         paginator="true"
+                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+                         rowsPerPageTemplate="5,10,{ShowAll|'All'}">
+
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{itemRentado.getItem().getNombre()}" />
+                </p:column>
+
+                <p:column headerText="Valor Multa">
+                    <h:outputText value="#{AlquilerItemsBean.getMultaCliente(itemRentado.getItem().getId())}" />
+                </p:column>
+
+
+
+                <f:facet name="footer">
+                    <h:commandButton id="Confirmar" action = "registrocliente?faces-redirect = true" value = "Confirmar" styleClass="rounded-button"/>
+                </f:facet>
+            </p:dataTable>
+
+            <!--Ingresar un nuevo cliente-->
+
+
+
+
+        </h:form>
+    </div>
+</h:body>
+
+</html>

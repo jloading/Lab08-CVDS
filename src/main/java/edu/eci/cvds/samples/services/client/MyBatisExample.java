@@ -109,8 +109,6 @@ public class MyBatisExample {
         
         sqlss.close();
 
-        
-        
     }
 
 
